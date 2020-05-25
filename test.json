@@ -1,0 +1,16 @@
+{
+  "client": {
+    "ip": "127.0.0.1" ,
+    "gamestate": {
+      "provider": {
+        "name": "Dota 2" ,
+        "appid": 570 ,
+        "version": 47 ,
+        "timestamp": 1590324752
+      } ,
+      "player": {} ,
+      "draft": {}
+    }
+  } ,
+  "index": 0
+}
