@@ -40,9 +40,6 @@
     "vue-template-compiler": "^2.6.11"
   },
   "_id": "@",
-  "gitHooks": {
-    "pre-commit": "lint-staged"
-  },
   "lint-staged": {
     "*.{js,jsx,vue,ts,tsx}": [
       "vue-cli-service lint",
