@@ -6,29 +6,19 @@ const http = require("http");
 const WebSocket = require("ws");
 
 const clients = [];
+let count = 0;
 
 let wsSendData = {};
-
-server.events.on("newclient", function(client) {
-  console.log("New client connection, IP address: " + client.ip);
-  if (client.auth && client.auth.token) {
-    console.log("Auth token: " + client.auth.token);
-  } else {
-    console.log("No Auth token");
-  }
-  clients.push(client);
-  runPolling();
-});
 
 let aegisTime = 0;
 let isFind = false;
 let isAegis = false;
 
 function runPolling() {
-  setInterval(function() {
+  setInterval(function () {
     let result = {};
     isFind = false;
-    clients.forEach(function(client, index) {
+    clients.forEach(function (client) {
       result = Object.assign({}, client);
       if (
         client &&
@@ -84,12 +74,22 @@ function runPolling() {
   }, 500);
 }
 
-let count = 0;
+server.events.on("newclient", function (client) {
+  console.log("New client connection, IP address: " + client.ip);
+  if (client.auth && client.auth.token) {
+    console.log("Auth token: " + client.auth.token);
+  } else {
+    console.log("No Auth token");
+  }
+  clients.push(client);
+  runPolling();
+});
+
 const app = express();
 app.use(express.static("dist"));
 const wsServer = http.createServer(app);
 const wss = new WebSocket.Server({ server: wsServer });
-wss.on("connection", ws => {
+wss.on("connection", (ws) => {
   setInterval(() => {
     ws.send(JSON.stringify(JSON.stringify(wsSendData)));
   }, 500);

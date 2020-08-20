@@ -7,11 +7,11 @@ export default new Vuex.Store({
   state: {
     socket: {
       isConnected: false,
-      message: null
-    }
+      message: null,
+    },
   },
   getters: {
-    getGameState: state => state.socket.message
+    getGameState: (state) => state.socket.message,
   },
   mutations: {
     SOCKET_ONOPEN(state) {
@@ -26,6 +26,6 @@ export default new Vuex.Store({
     // default handler called for all methods
     SOCKET_ONMESSAGE(state, message) {
       state.socket.message = JSON.parse(message);
-    }
-  }
+    },
+  },
 });

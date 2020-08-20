@@ -1,6 +1,12 @@
 <template>
   <div
-    style="width: 100%; display: grid; grid-template-columns: repeat(5, 1fr); align-content: center; justify-content: center"
+    style="
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      align-content: center;
+      justify-content: center;
+    "
   >
     <div v-for="(player, key) in radiantArr" class="fill" :key="key">
       <person :hero="player" :items="radiantItemsArr[key]" />
@@ -14,7 +20,7 @@ import Person from "@/components/Person.vue";
 
 @Component({
   name: "RadiantRoot",
-  components: { Person }
+  components: { Person },
 })
 export default class RadiantRoot extends Vue {
   @Prop() radiantHero: any | undefined;
@@ -34,5 +40,6 @@ export default class RadiantRoot extends Vue {
 .fill {
   width: 100%;
   height: 100%;
+  text-align: center;
 }
 </style>

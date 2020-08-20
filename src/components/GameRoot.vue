@@ -1,55 +1,61 @@
 <template>
   <div
-    style="display:grid; grid-template-rows: min-content 1fr min-content; width: 100%; height: 95vh;"
+    style="
+      display: grid;
+      grid-template-rows: min-content 1fr min-content 3.8vh;
+      width: 100%;
+      height: 100vh;
+    "
   >
-    <div
-      style="display: flex; width: 100%; flex-direction: row; margin-top: 5.3vh"
-    >
-      <div style="width: 27.7%; background-color: rgba(0,0,0,0);" />
-      <div style="width: 16.8%">
+    <div style="display: flex; width: 100%; flex-direction: row;">
+      <!--      ; background-color: rgba(255,0,0,0.5)-->
+      <div style="width: 28.6%;" />
+      <div style="width: 16%;">
         <RadiantRoot
           :radiant-hero="radiantHero"
           :radiant-items="radiantItems"
         />
       </div>
-      <div style="width: 10.8%; background-color: rgba(0,0,0,0);" />
-      <div style="width: 16.8%">
+      <!--      ; background-color: rgba(0,128,0, 0.5)-->
+      <div style="width: 10.8%;" />
+      <div style="width: 16%;">
         <DireRoot :dire-hero="direHero" :dire-items="direItems" />
       </div>
-      <div style="width: 27.7%; background-color: rgba(0,0,0,0);" />
+      <!--      ; background-color: rgba(0,0,255, 0.5)-->
+      <div style="width: 28.6%;" />
     </div>
-    <div></div>
+    <div />
+    <!-- map.roshan_state !== 'respawn_base' && -->
+    <!--      v-if="-->
+    <!--      map &&-->
+    <!--      map.roshan_state !== 'respawn_base' &&-->
+    <!--      map.roshan_state_end_seconds <= 600 &&-->
+    <!--      map.roshan_state_end_seconds !== 0-->
+    <!--      "-->
     <div
-      style="display:flex; flex-direction: row; text-shadow: 1px 1px 2px aliceblue; font-family: monospace; font-size: 24px"
+      v-if="getCurrentUser.user"
+      :style="
+        'display:grid; grid-template-columns: ' +
+        spellSize +
+        'vw 10vw auto; align-content: center;'
+      "
     >
-      <!-- map.roshan_state !== 'respawn_base' && -->
-      <div
-        style="display:flex; flex-direction: row; align-content: center"
-        v-if="
-          map &&
-            map.roshan_state !== 'respawn_base' &&
-            map.roshan_state_end_seconds <= 600 &&
-            map.roshan_state_end_seconds !== 0
-        "
-      >
-        <div
-          style=" margin-left: 16vw;    align-self: center;
-    align-items: center;
-    align-content: center;"
-        >
-          <img height="60px" src="../images/Roshan_icon.png" alt="roshan" />
-        </div>
-        <div>
-          <h1>
-            {{
-              Math.floor(map.roshan_state_end_seconds / 60) +
-                ":" +
-                Math.round(map.roshan_state_end_seconds % 60)
-            }}
-          </h1>
-        </div>
-      </div>
+      <!--       style="background-color: rgba(255,0,0,0.5)"-->
+      <div />
+      <Inventory
+        v-bind:current-user="getCurrentUser"
+        v-bind:items="getGameState.client.gamestate.items"
+      />
+      <!--       style="background-color: rgba(0,0,255,0.5)" -->
+      <div />
+      <!--        <div>-->
+      <!--          <h1>-->
+      <!--            4:51-->
+      <!--          </h1>-->
+      <!--        </div>-->
     </div>
+    <!--     style="background-color: rgba(25,25,65,0.8)" -->
+    <div />
   </div>
 </template>
 
@@ -57,28 +63,68 @@
 import { Vue, Component, Prop } from "vue-property-decorator";
 import RadiantRoot from "@/components/RadiantRoot.vue";
 import DireRoot from "@/components/DireRoot.vue";
+import Inventory from "@/components/Inventory.vue";
+import { getUser, spellCount, spellSize } from "@/helper/CurrentUser.ts";
 
 @Component({
   name: "GameRoot",
-  components: { DireRoot, RadiantRoot }
+  components: { Inventory, DireRoot, RadiantRoot },
 })
 export default class GameRoot extends Vue {
   @Prop() getGameState: any | undefined;
 
+  get getCurrentUser() {
+    if (
+      this.getGameState &&
+      this.getGameState.client &&
+      this.getGameState.client.gamestate
+    )
+      return getUser(this.getGameState.client.gamestate);
+    else return { user: false };
+  }
+
+  get spellCount(): number {
+    if (
+      this.getGameState &&
+      this.getGameState.client &&
+      this.getGameState.client.gamestate
+    )
+      return spellCount(this.getGameState.client.gamestate);
+    else return 0;
+  }
+
+  get spellSize() {
+    if (
+      this.getGameState &&
+      this.getGameState.client &&
+      this.getGameState.client.gamestate
+    )
+      return spellSize(this.spellCount);
+    else return 0;
+  }
+
   get radiantHero(): any[] {
-    return this.getGameState?.client?.gamestate?.hero?.team2;
+    return (
+      this.getGameState?.client?.gamestate?.hero?.team2 || [{}, {}, {}, {}, {}]
+    );
   }
   get direHero(): any[] {
-    return this.getGameState?.client?.gamestate?.hero?.team3;
+    return (
+      this.getGameState?.client?.gamestate?.hero?.team3 || [{}, {}, {}, {}, {}]
+    );
   }
   get radiantItems(): any[] {
-    return this.getGameState?.client?.gamestate?.items?.team2;
+    return (
+      this.getGameState?.client?.gamestate?.items?.team2 || [{}, {}, {}, {}, {}]
+    );
   }
   get direItems(): any[] {
-    return this.getGameState?.client?.gamestate?.items?.team3;
+    return (
+      this.getGameState?.client?.gamestate?.items?.team3 || [{}, {}, {}, {}, {}]
+    );
   }
   get map(): any {
-    return this.getGameState?.client?.gamestate?.map;
+    return this.getGameState?.client?.gamestate?.map || [{}, {}, {}, {}, {}];
   }
 }
 </script>

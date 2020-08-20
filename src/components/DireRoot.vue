@@ -1,6 +1,12 @@
 <template>
   <div
-    style="width: 100%; display: grid; grid-template-columns: repeat(5, 1fr);"
+    style="
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      align-content: center;
+      justify-content: center;
+    "
   >
     <div v-for="(player, key) in direArr" class="fill" :key="key">
       <person :hero="player" :items="direItemsArr[key]" />
@@ -14,7 +20,7 @@ import Person from "@/components/Person.vue";
 
 @Component({
   name: "DireRoot",
-  components: { Person }
+  components: { Person },
 })
 export default class DireRoot extends Vue {
   @Prop() direHero: any | undefined;
@@ -33,5 +39,6 @@ export default class DireRoot extends Vue {
 .fill {
   width: 100%;
   height: 100%;
+  text-align: center;
 }
 </style>

@@ -1,38 +1,76 @@
 <template
   ><div
-    style="display:flex; flex-direction: column; align-content: center; justify-content: center"
-    class="fill border-d"
+    style="
+      display: flex;
+      flex-direction: column;
+      align-content: center;
+      justify-content: center;
+    "
   >
-    <div
-      style="align-content: center; justify-content: center"
-      v-if="hero.smoked"
-    >
-      <img width="75%" src="../images/Smoke_of_Deceit_icon.png" />
-    </div>
-    <div
-      style="align-content: center; justify-content: center"
-      v-if="isScepter"
-    >
-      <img width="75%" src="../images/Aghanim's_Scepter_icon.png" />
-    </div>
-    <div
-      style="align-content: center; justify-content: center; text-shadow: 1px 1px 2px aliceblue; font-family: monospace"
-      v-if="isAegis"
-    >
+    <div style="height: 6vh;">
       <div
-        width="30px"
-        :style="
-          `background-image: url(${require('../images/Aegis_of_the_Immortal_icon.png')});background-size: contain;
-background-repeat: no-repeat;`
+        style="align-content: center; justify-content: center;"
+        v-if="hero.smoked"
+      >
+        <!--        -->
+        <!--        <img width="100%" src="../images/dota_icons/smoke.png" />-->
+        <video id="smokeV" width="100%" autoplay loop muted>
+          <source src="/smoke.webm" type="video/webm" />
+        </video>
+      </div>
+      <div v-else style="height: 3.8vh;"></div>
+
+      <div
+        v-if="isAegis && Aegis.time <= 300"
+        style="
+          margin-top: -3vh;
+          font-size: 20px;
+          font-weight: bolder;
+          font-family: 'Comic Sans MS', sans-serif;
+          color: #d46b25;
+          text-shadow: 0 0 6px black;
         "
       >
-        <h3>
-          {{ Math.floor(Aegis.time / 60) + ":" + Math.round(Aegis.time % 60) }}
-        </h3>
+        {{ Math.floor(Aegis.time / 60) + ":" + Math.round(Aegis.time % 60) }}
+
+        <!--              <video controls ref="videoAegis" width="100%" autoplay loop muted>-->
+        <!--                <source :src="require('@/video/aegis-time.webm')" type="video/webm" />-->
+        <!--              </video>-->
       </div>
+      <!--      <div style="align-content: center; justify-content: center;" v-else>-->
+      <!--        <img width="100%" src="../images/dota_icons/smoke.png" />-->
+      <!--      </div>-->
     </div>
-    <div style="align-content: center; justify-content: center" v-if="isGem">
-      <img width="75%" src="../images/Gem_of_True_Sight_icon.png" />
+    <div
+      style="
+        align-content: center;
+        justify-content: center;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        margin: 0 5px;
+      "
+    >
+      <div
+        v-if="isScepter"
+        style="align-content: center; justify-content: center;"
+      >
+        <img width="90%" src="../images/dota_icons/aghanim.png" />
+      </div>
+      <div
+        v-if="isAegis"
+        style="align-content: center; justify-content: center;"
+      >
+        <img width="90%" src="../images/dota_icons/aegis.png" />
+      </div>
+      <div v-if="isGem" style="align-content: center; justify-content: center;">
+        <!--      -->
+        <img width="90%" src="../images/dota_icons/gem.png" />
+      </div>
+      <!--        <h2>-->
+      <!--          &lt;!&ndash;          {{ Math.floor(Aegis.time / 60) + ":" + Math.round(Aegis.time % 60) }}&ndash;&gt;-->
+      <!--          4:51-->
+      <!--        </h2>-->
+      <!--      </div>-->
     </div>
   </div>
 </template>
@@ -41,7 +79,7 @@ background-repeat: no-repeat;`
 import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component({
-  name: "Person"
+  name: "Person",
 })
 export default class Person extends Vue {
   @Prop() hero: any | undefined;
@@ -91,4 +129,13 @@ export default class Person extends Vue {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+video {
+  width: 100%;
+  height: 3.8vh;
+  object-fit: cover;
+}
+#smokeV {
+  transform: rotate(180deg);
+}
+</style>
